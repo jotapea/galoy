@@ -148,7 +148,7 @@ type GetChainTransactionsResultBitcoind = {
   }[]
 }
 
-abstract class PayOnChainClient {
+export abstract class PayOnChainClient {
   client
 
   static clientPayInstance(): PayOnChainClient {
