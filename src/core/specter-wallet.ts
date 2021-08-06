@@ -6,7 +6,7 @@ import { BitcoindClient, BitcoindWalletClient } from "@services/bitcoind"
 import { getActiveOnchainLnd, lndsBalances } from "@services/lnd/utils"
 import { ledger } from "@services/mongodb"
 
-import { getOnChainTransactions } from "./on-chain"
+// import { getOnChainTransactions } from "./on-chain"
 import { UserWallet } from "./user-wallet"
 import { btc2sat, sat2btc } from "./utils"
 
@@ -15,8 +15,8 @@ const staticClient = ""
 
 export class SpecterWallet {
   // Needs access to both classes' methods
-  bitcoindClient
-  bitcoindWalletClient
+  bitcoindWalletClient!: BitcoindWalletClient // or // bitcoindWalletClient: undefined | BitcoindWalletClient
+  readonly bitcoindClient: BitcoindClient
   readonly logger: Logger
   readonly config: SpecterWalletConfig
 
@@ -218,8 +218,22 @@ export class SpecterWallet {
 
     const memo = `deposit of ${sats} sats to the cold storage wallet`
 
-    const outgoingOnchainTxns = await getOnChainTransactions({ lnd, incoming: false })
-    const [{ fee }] = outgoingOnchainTxns.filter((tx) => tx.id === id)
+    // const outgoingOnchainTxns = await getOnChainTransactions({ lnd, incoming: false })
+    // const [{ fee }] = outgoingOnchainTxns.filter((tx) => tx.id === id)
+    // bitcoind version
+    //////////
+    console.log(`vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv6`)
+    console.log(`vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv6`)
+    const txn = await this.bitcoindWalletClient.getTransaction({ txid: id })
+    console.log(`JSON.stringify(txn): ${JSON.stringify(txn)}`)
+    console.log(`vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv6`)
+    console.log(`vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv6`)
+    /////////
+    const fee = btc2sat(-txn.fee) // fee comes in BTC and negative
+    // TODO! how does the fee show with lightning?
+
+    //////////
+    // const fee = this.bitcoindClient.getTransaction()
 
     const metadata = {
       hash: id,

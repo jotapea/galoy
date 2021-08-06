@@ -42,7 +42,8 @@ beforeAll(async () => {
   walletUser0 = await getUserWallet(0)
   // load funder wallet before use it
   await getUserWallet(4)
-  await bitcoindClient.loadWallet({ filename: "outside" })
+  // await bitcoindClient.loadWallet({ filename: "outside" })
+  // await bitcoindClient.loadWallet({ filename: "hot" })
 })
 
 beforeEach(() => {
@@ -55,7 +56,8 @@ afterEach(async () => {
 
 afterAll(async () => {
   jest.restoreAllMocks()
-  await bitcoindClient.unloadWallet({ wallet_name: "outside" })
+  // await bitcoindClient.unloadWallet({ wallet_name: "outside" })
+  // await bitcoindClient.unloadWallet({ wallet_name: "hot" })
 })
 
 describe("FunderWallet - On chain", () => {
@@ -136,7 +138,7 @@ describe("UserWallet - On chain", () => {
     }
   })
 
-  it("identifies unconfirmed incoming on-chain transactions", async () => {
+  it.skip("identifies unconfirmed incoming on-chain transactions", async () => {
     const address = await walletUser0.getOnChainAddress()
     const sub = subscribeToTransactions({ lnd: lndonchain })
     sub.on("chain_transaction", onchainTransactionEventHandler)

@@ -142,7 +142,7 @@ type InWalletTransaction = {
 }
 
 type EstimateSmartFeeResult = {
-  feerate?: number
+  feerate: number // made required because error is now thrown, not returned
   errors?: [string]
   blocks: number
 }

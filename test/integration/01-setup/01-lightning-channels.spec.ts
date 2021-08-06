@@ -1,4 +1,5 @@
 import {
+  bitcoindClient,
   checkIsBalanced,
   closeChannel,
   getChannels,
@@ -24,6 +25,11 @@ const channelFee = 7637
 const lnds = [lnd1, lnd2, lndOutside1, lndOutside1]
 let channelLengthMain, channelLengthOutside1
 
+// beforeAll(async () => {
+//   await bitcoindClient.loadWallet({ filename: "outside" })
+//   await bitcoindClient.loadWallet({ filename: "hot" })
+// })
+
 beforeEach(async () => {
   await waitUntilSync({ lnds })
   channelLengthMain = (await getChannels({ lnd: lnd1 })).channels.length
@@ -33,6 +39,11 @@ beforeEach(async () => {
 afterEach(async () => {
   await checkIsBalanced()
 })
+
+// afterAll(async () => {
+//   await bitcoindClient.unloadWallet({ wallet_name: "outside" })
+//   await bitcoindClient.unloadWallet({ wallet_name: "hot" })
+// })
 
 // Setup the next network
 // lnd2 <- lnd1 <-> lndOutside1
